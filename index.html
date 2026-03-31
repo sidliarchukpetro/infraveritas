@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfraVeritas Protocol</title>
+<meta name="description" content="Physical asset verification for RWA tokenization. MiCA Article 36 compliance.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --text: #e8e4dc;
+    --muted: #6b6560;
+    --accent: #c8b89a;
+    --accent2: #4a7c6f;
+    --white: #f5f2ec;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(14,14,14,0.95);
+    border-bottom-color: var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 36px; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,184,154,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,184,154,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 80%, rgba(74,124,111,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(200,184,154,0.08) 0%, transparent 50%);
+  }
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 24px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent2);
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(52px, 8vw, 110px);
+    line-height: 1.0;
+    color: var(--white);
+    position: relative;
+    max-width: 900px;
+    margin-bottom: 40px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+    position: relative;
+    margin-bottom: 48px;
+    padding-left: 24px;
+    border-left: 1px solid var(--border);
+  }
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    position: relative;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: var(--accent);
+    color: #0e0e0e;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--white); transform: translateY(-1px); }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    right: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .hero-scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 120px 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--accent2);
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 32px;
+  }
+
+  /* PROBLEM */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 64px;
+  }
+  .problem-card {
+    background: var(--surface);
+    padding: 40px;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .problem-card:hover { border-color: var(--accent); }
+  .problem-card-num {
+    font-size: 48px;
+    font-family: 'DM Serif Display', serif;
+    color: var(--border);
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+  .problem-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--white);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+  .problem-card p { color: var(--muted); font-size: 13px; }
+
+  /* SOLUTION */
+  .solution-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .solution-text p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .nodes-list {
+    list-style: none;
+    margin-top: 32px;
+  }
+  .nodes-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .node-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    min-width: 28px;
+    padding-top: 2px;
+  }
+  .node-name { color: var(--white); }
+  .node-desc { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  .tech-stack {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+  }
+  .tech-stack h4 {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .tech-tag {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .tech-tag.active {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* PILOT */
+  .pilot-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 64px;
+    position: relative;
+    overflow: hidden;
+    max-width: 800px;
+  }
+  .pilot-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+  }
+  .pilot-box p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 40px;
+    max-width: 560px;
+    line-height: 1.9;
+  }
+
+  /* ABOUT */
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .about-text p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.9;
+  }
+  .patent-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-top: 8px;
+  }
+  .patent-badge::before {
+    content: '§';
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+  }
+
+  /* CONTACT */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .contact-info p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 40px;
+    line-height: 1.9;
+  }
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--accent); }
+  .contact-link-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+  .contact-link:hover .contact-link-icon { border-color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--muted);
+  }
+  .footer-copy {
+    font-size: 11px;
+    color: var(--border);
+    letter-spacing: 0.08em;
+  }
+
+  /* FADE IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px 60px; }
+    section { padding: 80px 24px; }
+    .problem-grid,
+    .solution-layout,
+    .about-layout,
+    .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+    .pilot-box { padding: 40px 24px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo">Infra<span>Veritas</span></div>
+  <div class="nav-links">
+    <a href="#solution">Solution</a>
+    <a href="#pilot">Pilot</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-tag">Physical Asset Verification Protocol</div>
+  <h1 class="hero-title">The <em>Missing Layer</em><br>in RWA Tokenization</h1>
+  <p class="hero-sub">Smart contracts tokenize buildings. They cannot verify if those buildings exist, match their on-chain representation, or maintain their stated value. MiCA Article 36 requires ongoing verification. No standard exists. Until now.</p>
+  <div class="hero-cta">
+    <a href="mailto:ppbarvinok@gmail.com" class="btn-primary">Request Pilot Verification →</a>
+    <a href="#solution" class="btn-secondary">Read the IPAS Standard</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-label">The Problem</div>
+  <h2 class="section-title fade-in">Physical Oracle<br>Problem</h2>
+  <div class="problem-grid">
+    <div class="problem-card fade-in">
+      <div class="problem-card-num">01</div>
+      <h3>Blind Tokenization</h3>
+      <p>A smart contract cannot determine whether a building exists, whether its foundation is compromised, or whether the floor area matches the emission prospectus.</p>
+    </div>
+    <div class="problem-card fade-in">
+      <div class="problem-card-num">02</div>
+      <h3>MiCA Article 36</h3>
+      <p>EU regulation requires proof of physical existence, ongoing verification, and transparent collateral management. Most RWA protocols are not ready.</p>
+    </div>
+    <div class="problem-card fade-in">
+      <div class="problem-card-num">03</div>
+      <h3>Static Audits Fail</h3>
+      <p>Traditional appraisals capture value at a single point in time. Hidden structural defects, degradation, and floor area manipulation go undetected.</p>
+    </div>
+    <div class="problem-card fade-in">
+      <div class="problem-card-num">04</div>
+      <h3>$32B at Risk</h3>
+      <p>ERC-3643 secures over $32 billion in tokenized assets — with zero standardized mechanism to verify the physical condition of underlying collateral.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="section-label">The Solution</div>
+  <div class="solution-layout">
+    <div class="solution-text">
+      <h2 class="section-title fade-in">IPAS Verification Standard</h2>
+      <p>Five structural nodes. Risk-based inspection schedule. Cryptographic attestations on-chain. Licensed CC3 engineers verify physical assets on-site — results signed, hashed, and pushed to ERC-3643 compliance modules and Chainlink Proof of Reserve.</p>
+      <p>Smart contracts automatically block trading of degraded assets. The physical oracle problem is solved.</p>
+      <ul class="nodes-list">
+        <li class="fade-in">
+          <span class="node-num">N1</span>
+          <div>
+            <div class="node-name">Foundation & Geotechnical Stability</div>
+            <div class="node-desc">Settlement, crack width, moisture intrusion, reinforcement condition</div>
+          </div>
+        </li>
+        <li class="fade-in">
+          <span class="node-num">N2</span>
+          <div>
+            <div class="node-name">Load-Bearing Structure</div>
+            <div class="node-desc">Steel corrosion, concrete carbonation, bolt torque verification</div>
+          </div>
+        </li>
+        <li class="fade-in">
+          <span class="node-num">N3</span>
+          <div>
+            <div class="node-name">Roof & Envelope Systems</div>
+            <div class="node-desc">Thermal imaging, membrane delamination, facade anchor integrity</div>
+          </div>
+        </li>
+        <li class="fade-in">
+          <span class="node-num">N4</span>
+          <div>
+            <div class="node-name">MEP Systems</div>
+            <div class="node-desc">HVAC capacity, transformer load, hydraulic testing</div>
+          </div>
+        </li>
+        <li class="fade-in">
+          <span class="node-num">N5</span>
+          <div>
+            <div class="node-name">Geometric Compliance</div>
+            <div class="node-desc">LiDAR floor area verification ±2%, ceiling heights, column grids</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <div class="tech-stack fade-in">
+        <h4>Technical Stack</h4>
+        <div class="tech-tags">
+          <span class="tech-tag active">ERC-3643</span>
+          <span class="tech-tag active">Chainlink PoR</span>
+          <span class="tech-tag active">IPFS</span>
+          <span class="tech-tag active">Proof of Expertise</span>
+          <span class="tech-tag">LiDAR / Photogrammetry</span>
+          <span class="tech-tag">BIM Integration</span>
+          <span class="tech-tag">PE Stamp Attestation</span>
+          <span class="tech-tag">ERC-5484 SBT</span>
+          <span class="tech-tag">iXBRL / ESMA</span>
+          <span class="tech-tag">MiCA Art. 36 & 45</span>
+        </div>
+        <h4 style="margin-top:8px;">Regulatory Alignment</h4>
+        <p style="color:var(--muted);font-size:12px;line-height:1.8;">MiCA Article 36 & 45 · EBA/Op/2025/13 · ESMA iXBRL · RICS AI Standard March 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILOT -->
+<section id="pilot">
+  <div class="section-label">Pilot Offer</div>
+  <div class="pilot-box fade-in">
+    <h2 class="section-title">Free Pilot<br>Verification</h2>
+    <p>We offer a complete verification of 3–5 assets in your pool — all five structural nodes, LiDAR spatial scan, licensed PE stamp attestation — in exchange for a published case study. No cost. No obligation. Just proof that the physical oracle problem is solved at industrial scale.</p>
+    <p style="color:var(--text);font-size:12px;">Eligible protocols: Centrifuge · Tokeny · Blocksquare · Plume · RealT · and similar RWA platforms with tokenized construction or real estate assets.</p>
+    <a href="mailto:ppbarvinok@gmail.com" class="btn-primary">Request Free Pilot →</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <div class="about-layout">
+    <div class="about-stats">
+      <div class="stat-box fade-in">
+        <div class="stat-num">25+</div>
+        <div class="stat-label">Years Practice</div>
+      </div>
+      <div class="stat-box fade-in">
+        <div class="stat-num">157</div>
+        <div class="stat-label">Buildings Verified</div>
+      </div>
+      <div class="stat-box fade-in">
+        <div class="stat-num">CC3</div>
+        <div class="stat-label">Engineer Class</div>
+      </div>
+      <div class="stat-box fade-in">
+        <div class="stat-num">v1.0</div>
+        <div class="stat-label">IPAS Standard</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <h2 class="section-title fade-in">Petro Sidliarchuk</h2>
+      <p>Structural Engineer CC3 with 25 years of practice and 157 buildings designed and supervised. Founder of InfraVeritas Protocol — the first engineering framework designed to solve the physical oracle problem in RWA tokenization.</p>
+      <p>Submitted the IPAS Verification Standard v1.0 to the ERC-3643 Association and ESMA Digital Finance Contact Group. Active academic collaboration on hybrid blockchain architectures for construction data verification.</p>
+      <div class="patent-badge">USPTO Provisional Patent #63/876,031</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Contact</div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <h2 class="section-title fade-in">Let's Talk</h2>
+      <p>Interested in a pilot verification? Have assets that need MiCA Article 36 compliance? Building an RWA protocol and need a physical verification layer? Reach out directly.</p>
+      <div class="contact-links">
+        <a href="mailto:ppbarvinok@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉</div>
+          ppbarvinok@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/petrosidliarchuk-infraveritas/" target="_blank" class="contact-link">
+          <div class="contact-link-icon">in</div>
+          linkedin.com/in/petrosidliarchuk-infraveritas
+        </a>
+      </div>
+    </div>
+    <div class="fade-in" style="padding-top:120px;">
+      <div style="background:var(--surface);border:1px solid var(--border);padding:40px;">
+        <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;">Current Status</p>
+        <p style="color:var(--muted);font-size:12px;line-height:1.9;margin-bottom:16px;">✓ &nbsp;IPAS Standard v1.0 submitted to ERC-3643 Association</p>
+        <p style="color:var(--muted);font-size:12px;line-height:1.9;margin-bottom:16px;">✓ &nbsp;Submitted to ESMA Digital Finance Contact Group</p>
+        <p style="color:var(--muted);font-size:12px;line-height:1.9;margin-bottom:16px;">◎ &nbsp;Pilot program open — 0 of 3 slots filled</p>
+        <p style="color:var(--muted);font-size:12px;line-height:1.9;">◎ &nbsp;Witness Network — recruiting CC2/CC3 engineers</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">InfraVeritas Protocol</div>
+  <div class="footer-copy">© 2026 · USPTO #63/876,031 · Physical Asset Verification Standard</div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Fade in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
