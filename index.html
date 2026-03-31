@@ -319,6 +319,22 @@
     color: var(--accent2);
   }
 
+  /* VIDEO */
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-top: 64px;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+
   /* PILOT */
   .pilot-box {
     background: var(--surface);
@@ -506,7 +522,7 @@
   <h1 class="hero-title">The <em>Missing Layer</em><br>in RWA Tokenization</h1>
   <p class="hero-sub">Smart contracts tokenize buildings. They cannot verify if those buildings exist, match their on-chain representation, or maintain their stated value. MiCA Article 36 requires ongoing verification. No standard exists. Until now.</p>
   <div class="hero-cta">
-    <a href="mailto:ppbarvinok@gmail.com" class="btn-primary">Request Pilot Verification →</a>
+    <a href="/cdn-cgi/l/email-protection#80f0f0e2e1f2f6e9eeefebc0e7ede1e9ecaee3efed" class="btn-primary">Request Pilot Verification →</a>
     <a href="#solution" class="btn-secondary">Read the IPAS Standard</a>
   </div>
   <div class="hero-scroll">
@@ -590,6 +606,8 @@
       </ul>
     </div>
     <div>
+      <div>
+      <a href="IPAS_Verification_Standard_v1.0.pdf.pdf" target="_blank" class="btn-primary" style="display:inline-flex;margin-bottom:32px;">Download IPAS Standard v1.0 →</a>
       <div class="tech-stack fade-in">
         <h4>Technical Stack</h4>
         <div class="tech-tags">
@@ -609,6 +627,15 @@
       </div>
     </div>
   </div>
+
+  <!-- VIDEO -->
+  <div class="fade-in" style="margin-top:80px;">
+    <div class="section-label">Watch</div>
+    <div class="video-wrapper">
+      <iframe src="https://www.youtube.com/embed/bbPca35s0xM" title="InfraVeritas Protocol" allowfullscreen></iframe>
+    </div>
+  </div>
+
 </section>
 
 <!-- PILOT -->
@@ -618,7 +645,7 @@
     <h2 class="section-title">Free Pilot<br>Verification</h2>
     <p>We offer a complete verification of 3–5 assets in your pool — all five structural nodes, LiDAR spatial scan, licensed PE stamp attestation — in exchange for a published case study. No cost. No obligation. Just proof that the physical oracle problem is solved at industrial scale.</p>
     <p style="color:var(--text);font-size:12px;">Eligible protocols: Centrifuge · Tokeny · Blocksquare · Plume · RealT · and similar RWA platforms with tokenized construction or real estate assets.</p>
-    <a href="mailto:ppbarvinok@gmail.com" class="btn-primary">Request Free Pilot →</a>
+    <a href="/cdn-cgi/l/email-protection#057575676477736c6b6a6e456268646c692b666a68" class="btn-primary">Request Free Pilot →</a>
   </div>
 </section>
 
@@ -661,9 +688,9 @@
       <h2 class="section-title fade-in">Let's Talk</h2>
       <p>Interested in a pilot verification? Have assets that need MiCA Article 36 compliance? Building an RWA protocol and need a physical verification layer? Reach out directly.</p>
       <div class="contact-links">
-        <a href="mailto:ppbarvinok@gmail.com" class="contact-link">
+        <a href="/cdn-cgi/l/email-protection#9fefeffdfeede9f6f1f0f4dff8f2fef6f3b1fcf0f2" class="contact-link">
           <div class="contact-link-icon">✉</div>
-          ppbarvinok@gmail.com
+          <span class="__cf_email__" data-cfemail="8bfbfbe9eaf9fde2e5e4e0cbece6eae2e7a5e8e4e6">[email&#160;protected]</span>
         </a>
         <a href="https://www.linkedin.com/in/petrosidliarchuk-infraveritas/" target="_blank" class="contact-link">
           <div class="contact-link-icon">in</div>
@@ -688,7 +715,7 @@
   <div class="footer-copy">© 2026 · USPTO #63/876,031 · Physical Asset Verification Standard</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Navbar scroll
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
@@ -696,15 +723,4 @@
   });
 
   // Fade in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
+  const observer 
